@@ -39,6 +39,7 @@ router.post('/register', (req, res)=>{
                 message: "An error has occurred while creating your user. Please try again."
             });
         } else {
+            console.log(newUser);
             res.send({
                 status: 200,
                 message: "User created succesfully!"
@@ -48,3 +49,5 @@ router.post('/register', (req, res)=>{
 
 
 })
+
+module.exports = router;

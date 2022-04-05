@@ -38,7 +38,7 @@ router.post('/register', (req, res)=>{
     if(utils.validateEmail(email)){
         newUser.save((err)=>{
             if(err) {
-                console.log(err);
+                console.log(err.name);
                 res.send({
                     status: 400,
                     message: "An error has occurred while creating your user. Please try again."
@@ -97,6 +97,23 @@ router.post('/login', (req, res) => {
             })
         }
     })
+
+})
+
+router.get('/', (req, res)=>{
+    const user = utils.getUserData(req.headers.authorization.split(" ")[1]);
+
+    if(user){
+        res.send({
+            status: 200,
+            data: user
+        })
+    } else {
+        res.send({
+            status: 400,
+            message: 'Invalid token. Please log in again' 
+        })
+    }
 
 })
 

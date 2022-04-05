@@ -30,26 +30,33 @@ router.post('/register', (req, res)=>{
     const newUser = new User({
         username: username,
         email: email,
-        password: bcrypt.hashSync(password, saltRounds),
+        password: password && bcrypt.hashSync(password, saltRounds),
         profile: utils.setProfilePicture(username)
     });
 
-
-    newUser.save((err)=>{
-        if(err) {
-            console.log(err);
-            res.send({
-                status: 400,
-                message: "An error has occurred while creating your user. Please try again."
-            });
-        } else {
-            console.log(newUser);
-            res.send({
-                status: 200,
-                message: "User created succesfully!"
-            })
-        }
-    });
+    
+    if(utils.validateEmail(email)){
+        newUser.save((err)=>{
+            if(err) {
+                console.log(err);
+                res.send({
+                    status: 400,
+                    message: "An error has occurred while creating your user. Please try again."
+                });
+            } else {
+                console.log(newUser);
+                res.send({
+                    status: 200,
+                    message: "User created succesfully!"
+                })
+            }
+        });
+    } else {
+        res.send({
+            status: 400,
+            message: "Please enter a valid email and try again."
+        })
+    }
 
 })
 // authenticate user

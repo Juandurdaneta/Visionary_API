@@ -44,9 +44,25 @@ exports.updateUser = function(data, response, token) {
 
             });
 
+}
 
+exports.deleteUser = function(token, response) {
 
+  const user = getUserData(token);
 
+  user && User.findOneAndDelete({userId: user.userId}, (err, deletedUser) => {
+    if(!err){
+      response.send({
+        status: 200,
+        message: "User deleted successfully"
+      })
+    } else {
+      response.send({
+        status: 400,
+        message: "Failed to delete user, please try again..."
+      })
+    }
+  })
 
 }
 
@@ -57,8 +73,7 @@ function signUser(userDoc, key, response) {
     if(!err){
         response.send({
             status: 200,
-            token: newToken,
-            message: "User updated successfully!"
+            token: newToken
         })
     } else {
         console.log(err)

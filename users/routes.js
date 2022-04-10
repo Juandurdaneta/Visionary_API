@@ -123,12 +123,15 @@ router.get('/', (req, res)=>{
 
 router.put('/', (req, res)=>{
 
-    console.log(req.body)
 
     utils.updateUser(req.body, res, req.headers.authorization.split(" ")[1]);
 
     
 })
+
+router.delete('/', (req, res) =>{
+    utils.deleteUser(req.headers.authorization.split(" ")[1], res);
+});
 
 
 module.exports = router;

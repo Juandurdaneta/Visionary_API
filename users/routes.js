@@ -123,7 +123,9 @@ router.get('/', (req, res)=>{
 
 router.put('/', (req, res)=>{
 
-
+    const {email, username} = req.body;
+    console.log(email, username)
+    console.log('hello', req.body)
     utils.updateUser(req.body, res, req.headers.authorization.split(" ")[1]);
 
     

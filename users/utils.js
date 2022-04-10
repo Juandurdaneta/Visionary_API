@@ -25,10 +25,10 @@ exports.getUserData = function(token) {
 exports.updateUser = function(data, response, token) {
 
   const decoded = jwt.verify(token, secretKey)
-  console.log(decoded)
-  decoded && User.findOneAndUpdate({userId: decoded.userId }, data, (err, foundUser)=>{
+  decoded && User.findOneAndUpdate({userId: decoded.userId }, data, {new: true}, (err, foundUser)=>{
 
               if(!err && foundUser){
+
 
                 signUser(foundUser._doc, secretKey, response);
          
@@ -67,6 +67,9 @@ exports.deleteUser = function(token, response) {
 }
 
 function signUser(userDoc, key, response) {
+
+
+  console.log(userDoc)
 
   jwt.sign(userDoc, key, (err, newToken)=>{
 

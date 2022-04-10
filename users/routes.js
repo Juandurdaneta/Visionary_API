@@ -31,7 +31,7 @@ router.post('/register', (req, res)=>{
         username: username,
         email: email,
         password: password && bcrypt.hashSync(password, saltRounds),
-        profile: utils.setProfilePicture(username)
+        profileImage: utils.setProfilePicture(username)
     });
 
     
@@ -100,6 +100,8 @@ router.post('/login', (req, res) => {
 
 })
 
+// get user data
+
 router.get('/', (req, res)=>{
     const user = utils.getUserData(req.headers.authorization.split(" ")[1]);
 
@@ -117,6 +119,16 @@ router.get('/', (req, res)=>{
 
 })
 
+// update user info
+
+router.put('/', (req, res)=>{
+
+    console.log(req.body)
+
+    utils.updateUser(req.body, res, req.headers.authorization.split(" ")[1]);
+
+    
+})
 
 
 module.exports = router;

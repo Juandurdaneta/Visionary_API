@@ -123,16 +123,15 @@ router.get('/', (req, res)=>{
 
 router.put('/', (req, res)=>{
 
-    const {email, username} = req.body;
-    console.log(email, username)
-    console.log('hello', req.body)
     utils.updateUser(req.body, res, req.headers.authorization.split(" ")[1]);
 
     
 })
 
 router.delete('/', (req, res) =>{
-    utils.deleteUser(req.headers.authorization.split(" ")[1], res);
+
+    const user = utils.getUserData(req.headers.authorization.split(" ")[1]);
+    utils.deleteUser(user, res);
 });
 
 

@@ -46,10 +46,8 @@ exports.updateUser = function(data, response, token) {
 
 }
 
-exports.deleteUser = function(token, response) {
-
-  const user = getUserData(token);
-
+exports.deleteUser = function(user, response) {
+  console.log(user)
   user && User.findOneAndDelete({userId: user.userId}, (err, deletedUser) => {
     if(!err){
       response.send({

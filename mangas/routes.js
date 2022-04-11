@@ -8,7 +8,14 @@ const utils = require('./utils')
 // create manga
 
 router.post('/', (req, res) =>{
-    utils.createManga(req.body, req.headers.authorization.split(" ")[1], res);
+    try{
+        utils.createManga(req.body, req.headers.authorization.split(" ")[1], res);
+    } catch(err) {
+        res.send({
+            status: 400,
+            message: "Authorization token invalid or not provided..."
+        })
+    }
 })
 
 // get specific manga
@@ -16,15 +23,13 @@ router.post('/', (req, res) =>{
 router.get('/:mangaId', (req, res) =>{
     const mangaId = req.params.mangaId;
     utils.getManga(mangaId, res);
+
 })
 
 // get all mangas
 
 router.get('/', (req, res) =>{
-    const mangas = utils.getMangas();
-    res.send({
-        ...mangas
-    })
+    utils.getMangas(res);
 })
 
 // update manga
@@ -39,3 +44,5 @@ router.delete('/:mangaId', (req, res)=>{
     const mangaId = req.params.mangaId;
     utils.deleteManga(mangaId, req.headers.authorization.split(" ")[1], res )
 })
+
+module.exports = router;

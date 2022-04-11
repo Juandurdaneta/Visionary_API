@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-const chaptersSchema = new mongoose.Model({
+let chaptersSchema = new mongoose.Schema({
     mangaId : {
         type: Number,
         required: true

@@ -25,7 +25,10 @@ exports.createManga = function(data, token, response){
 
         newManga.save((err)=>{
             if(!err){
-                response.send(s)
+                response.send({
+                    status: 200,
+                    message: 'Manga added successfully!'
+                })
             }
         })
 
@@ -35,5 +38,34 @@ exports.createManga = function(data, token, response){
             message: 'Invalid token, please try again.'
         })
     }
+
+}
+
+exports.getMangas = function(res){
+
+    let manga = Manga.find({}, (err, foundMangas) =>{
+        if(!err){
+            res.send({
+                ...foundMangas
+            })
+        } 
+    })
+
+
+}
+
+exports.getManga =  function(mangaId, res) {
+
+
+      Manga.find({mangaId: mangaId}, (err, foundManga) =>{
+        if(!err && foundManga != ""){
+           res.send({
+                ...foundManga
+           })
+        } else {
+            res.send({status: 4004, message: "Manga not found"})
+        }
+    })
+
 
 }

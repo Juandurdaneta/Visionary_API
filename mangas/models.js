@@ -23,10 +23,6 @@ const mangaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    userId : {
-        type: Number,
-        required: true
-    },
     overview : {
         type : String
     },
@@ -36,6 +32,14 @@ const mangaSchema = new mongoose.Schema({
     },
     poster: {
         type: String
+    },
+    datePublished : {
+        type: Date,
+        default: Date.now
+    },
+    userId : {
+        type: Number,
+        required: true
     },
     chapters : [chaptersSchema]
 })

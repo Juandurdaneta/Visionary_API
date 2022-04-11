@@ -42,7 +42,15 @@ router.put('/:mangaId', (req, res) =>{
 
 router.delete('/:mangaId', (req, res)=>{
     const mangaId = req.params.mangaId;
-    utils.deleteManga(mangaId, req.headers.authorization.split(" ")[1], res )
+    try{
+        utils.deleteManga(mangaId, req.headers.authorization.split(" ")[1], res )
+    } catch(err) {
+        res.send({
+            status: 400,
+            message: "Authorization token invalid or not provided..."
+        })
+    }
+
 })
 
 module.exports = router;

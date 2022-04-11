@@ -43,10 +43,10 @@ exports.createManga = function(data, token, response){
 
 exports.getMangas = function(res){
 
-    let manga = Manga.find({}, (err, foundMangas) =>{
+     Manga.find({}, (err, foundMangas) =>{
         if(!err){
             res.send({
-                ...foundMangas
+                foundMangas
             })
         } 
     })
@@ -63,7 +63,27 @@ exports.getManga =  function(mangaId, res) {
                 ...foundManga
            })
         } else {
-            res.send({status: 4004, message: "Manga not found"})
+            res.send({status: 404, message: "Manga not found"})
+        }
+    })
+
+}
+
+exports.deleteManga = function(mangaId, token, res) {
+
+    const propietary = validateToken(token);
+
+    Manga.findOneAndDelete({mangaId: mangaId, userId: propietary.userId}, (err, deletedManga) =>{
+        if(!err && deletedManga){
+            res.send({
+                status: 200,
+                message: "Manga removed successfully"
+            })
+        } else {
+            res.send({
+                    status: 400,
+                     message: "Failed to delete manga, please try again..."
+            })
         }
     })
 

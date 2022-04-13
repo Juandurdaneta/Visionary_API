@@ -29,6 +29,11 @@ exports.createManga = function(data, token, response){
                     status: 200,
                     message: 'Manga added successfully!'
                 })
+            } else{
+                response.send({
+                    status: 500,
+                    message: "Failed to add manga, please try again..."
+                })
             }
         })
 

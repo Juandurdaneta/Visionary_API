@@ -4,6 +4,8 @@ const secretKey = process.env.SECRET_KEY
 // schemas
 const userSchema = require('./models.js')
 const User = userSchema.getUser();
+const mangaSchema = require('../mangas/models');
+const Manga = mangaSchema.getManga();
 
 exports.setProfilePicture = function(username){
     return `https://avatars.dicebear.com/api/identicon/${username}.svg`
@@ -82,5 +84,46 @@ function signUser(userDoc, key, response) {
     }
 
   })
+
+}
+
+
+exports.followManga = function(mangaId, token, res) {
+
+  const user = validateToken(token);
+
+  if(user){
+       // updating following count
+      Manga.findOneAndUpdate({_id: mangaId}, {$inc:{'followers':1}});
+
+      // adding to following list
+      User.findOneAndUpdate({_id: user.userId}, {$push: { following: mangaId }}, (err, foundUser)=>{
+
+          if(!err && foundUser){
+
+
+            signUser(foundUser._doc, secretKey, response);
+    
+          } 
+            else {
+            console.log(err)
+            response.send({
+              status: 400,
+              message: "An error has occurred, please try again."
+            })
+          }
+          
+      });
+
+
+
+  } else {
+      res.send({
+          status: 403,
+          message: "Invalid token or not provided. Please try again."
+      })
+  }
+
+ 
 
 }

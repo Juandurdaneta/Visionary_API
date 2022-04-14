@@ -44,6 +44,9 @@ const mangaSchema = new mongoose.Schema({
     author : {
         type: String
     },
+    followers : {
+        type: Number
+    },
     chapters : [chaptersSchema]
 })
 

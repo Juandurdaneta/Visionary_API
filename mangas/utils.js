@@ -74,6 +74,25 @@ exports.getManga =  function(mangaId, res) {
 
 }
 
+exports.updateManga = function(mangaId, token, data, res){
+
+    const propietary = validateToken(token);
+
+    Manga.findOneAndUpdate({mangaId: mangaId, userId: propietary.userId}, data, (err, foundManga) => {
+        if(!err && foundManga){
+            res.send({
+                status: 200,
+                message: "Manga updated successfully"
+            })
+        } else {
+            res.send({
+                status: 400,
+                 message: "Failed to update manga, please try again..."
+        })
+        }
+    })
+}
+
 exports.deleteManga = function(mangaId, token, res) {
 
     const propietary = validateToken(token);

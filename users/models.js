@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: 'https://avatars.dicebear.com/api/identicon/default.svg'
     },
-    following : { type: Schema.Types.ObjectId, ref: 'Manga' }
+    following : [{ type: Schema.Types.ObjectId, ref: 'Manga' }]
 })
 
 userSchema.plugin(AutoIncrement, {inc_field: 'userId'});

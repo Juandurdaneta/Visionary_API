@@ -134,5 +134,22 @@ router.delete('/', (req, res) =>{
     utils.deleteUser(user, res);
 });
 
+router.put('/followManga', (req, res) =>{
+    const { mangaId } = req.body;
+
+    try {
+        const user = utils.getUserData(req.headers.authorization.split(" ")[1]);
+
+        utils.followManga(mangaId, user, res);
+    } catch(err) {
+        console.log(err)
+        res.send({
+            status: 403,
+            message: "Token not valid or not provided"
+        });
+    }   
+
+})
+
 
 module.exports = router;

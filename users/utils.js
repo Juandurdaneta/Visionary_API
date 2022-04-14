@@ -66,6 +66,61 @@ exports.deleteUser = function(user, response) {
 
 }
 
+
+
+exports.followManga = function(mangaId, user, res) {
+
+  const isFollowing = user.following.includes(mangaId);
+
+  if(user && !isFollowing){
+       // updating following count
+      Manga.findOneAndUpdate({_id: mangaId}, {$inc:{'followers':1}}, {new: true},  (err, manga)=>{
+        if(!err){
+          console.log(manga);
+        } else {
+          console.log(err)
+        }
+      });
+
+      // adding to following list
+      User.findOneAndUpdate({_id: user._id}, {$push: { following: mangaId }}, {new: true}, (err, foundUser)=>{
+
+          if(!err && foundUser){
+
+
+            signUser(foundUser._doc, secretKey, res);
+    
+          } 
+            else {
+            console.log(err)
+            res.send({
+              status: 400,
+              message: "An error has occurred, please try again."
+            })
+          }
+
+      });
+
+
+
+  } else if(isFollowing) {
+      res.send({
+          status: 400,
+          message: "User is already following this manga."
+      })
+  } else {
+    res.send({
+      status: 403,
+      message: "Invalid token or not provided. Please try again."
+  })
+  }
+
+ 
+
+}
+
+
+
 function signUser(userDoc, key, response) {
 
 
@@ -84,46 +139,5 @@ function signUser(userDoc, key, response) {
     }
 
   })
-
-}
-
-
-exports.followManga = function(mangaId, token, res) {
-
-  const user = validateToken(token);
-
-  if(user){
-       // updating following count
-      Manga.findOneAndUpdate({_id: mangaId}, {$inc:{'followers':1}});
-
-      // adding to following list
-      User.findOneAndUpdate({_id: user.userId}, {$push: { following: mangaId }}, (err, foundUser)=>{
-
-          if(!err && foundUser){
-
-
-            signUser(foundUser._doc, secretKey, response);
-    
-          } 
-            else {
-            console.log(err)
-            response.send({
-              status: 400,
-              message: "An error has occurred, please try again."
-            })
-          }
-          
-      });
-
-
-
-  } else {
-      res.send({
-          status: 403,
-          message: "Invalid token or not provided. Please try again."
-      })
-  }
-
- 
 
 }

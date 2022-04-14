@@ -45,7 +45,8 @@ const mangaSchema = new mongoose.Schema({
         type: String
     },
     followers : {
-        type: Number
+        type: Number,
+        default: 0
     },
     chapters : [chaptersSchema]
 })

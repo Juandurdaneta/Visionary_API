@@ -78,7 +78,7 @@ router.delete('/:mangaId', (req, res)=>{
 
 // post chapter
 
-router.post('/:mangaId',  upload.array('multi-files'), (req, res) =>{
+router.post('/:mangaId',  upload.array('pages'), (req, res) =>{
     const mangaId = req.params.mangaId;
 
     const chapterNumber = req.body.chapterNumber
@@ -95,7 +95,7 @@ router.post('/:mangaId',  upload.array('multi-files'), (req, res) =>{
     })
 
     utils.createChapter(mangaId, chapterNumber, chapterImages, res );
-        
+
 
 })
 

@@ -99,4 +99,11 @@ router.post('/:mangaId',  upload.array('pages'), (req, res) =>{
 
 })
 
+// get all chapters from a specific manga
+router.get('/:mangaId/chapters', (req,res)=>{
+    const mangaId = req.params.mangaId;
+
+    utils.getChapters(mangaId, res);
+});
+
 module.exports = router;

@@ -118,6 +118,8 @@ exports.deleteManga = function(mangaId, token, res) {
 }
 
 // chapter utils
+
+// create chapter
 exports.createChapter = function(mangaId, chapterNumber, files, res){
 
     const newChapter = new Chapter({
@@ -148,3 +150,16 @@ exports.createChapter = function(mangaId, chapterNumber, files, res){
 
 
 }
+
+// get chapter's
+
+exports.getChapters = function(mangaId, res){
+    Chapter.find({mangaId: mangaId}, (err, chaptersFound) =>{
+        if(!err){
+            res.send({
+                chaptersFound
+            })
+        }
+    })
+}
+

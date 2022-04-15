@@ -1,9 +1,32 @@
 const express = require('express');
 const router = express.Router();
-
-
+const multer = require('multer');
+const path = require('path');
+var fs = require('fs');
 // utils
 const utils = require('./utils')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        var newDestination = 'mangas/uploads/' + req.params.mangaId;
+        var stat = null;
+        try {
+            stat = fs.statSync(newDestination);
+        } catch (err) {
+            fs.mkdirSync(newDestination);
+        }
+        if (stat && !stat.isDirectory()) {
+            throw new Error('Directory cannot be created because an inode of a different type exists at "' + dest + '"');
+        }       
+        cb(null, newDestination);
+    },
+    filename: function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+var upload = multer({ storage: storage })
+
 
 // create manga
 
@@ -50,6 +73,29 @@ router.delete('/:mangaId', (req, res)=>{
             message: "Authorization token invalid or not provided..."
         })
     }
+
+})
+
+// post chapter
+
+router.post('/:mangaId',  upload.array('multi-files'), (req, res) =>{
+    const mangaId = req.params.mangaId;
+
+    const chapterNumber = req.body.chapterNumber
+
+    const filesUploaded = req.files;
+
+    const chapterImages = []
+
+    filesUploaded.map((file)=>{
+        chapterImages.push({
+            data: fs.readFileSync(path.join(__dirname + '/uploads/'+ mangaId + "/" + file.filename)),
+            contentType: 'image/png'
+        })
+    })
+
+    utils.createChapter(mangaId, chapterNumber, chapterImages, res );
+        
 
 })
 

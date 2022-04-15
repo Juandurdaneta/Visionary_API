@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const { Schema } = mongoose;
 
 let chaptersSchema = new mongoose.Schema({
     mangaId : {
@@ -10,12 +11,10 @@ let chaptersSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    chapterImages : {
-        type: Array
-    },
-    poster : {
-        type: String
-    }
+    chapterImages : [{
+        data: Buffer,
+        contentType: String
+    }]
 })
 
 const mangaSchema = new mongoose.Schema({
@@ -48,7 +47,8 @@ const mangaSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    chapters : [chaptersSchema]
+    chapters : [{ type: Schema.Types.ObjectId, ref: 'Chapter' }]
+    
 })
 
 mangaSchema.plugin(AutoIncrement, {inc_field: 'mangaId'});

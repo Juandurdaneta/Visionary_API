@@ -1,9 +1,10 @@
 // SCHEMAS
 const mangaSchema = require("./models");
 const Manga = mangaSchema.getManga();
-
+const Chapter = mangaSchema.getChapter();
 // JWT
 const jwt = require('jsonwebtoken');
+var path = require('path');
 
 // DOTENV
 require('dotenv').config();
@@ -12,6 +13,8 @@ const validateToken = (token) => {
     const decoded = jwt.verify(token, process.env.SECRET_KEY)
     return decoded
 }
+var fs = require('fs');
+
 
 exports.createManga = function(data, token, response){
     const user = validateToken(token);
@@ -110,6 +113,38 @@ exports.deleteManga = function(mangaId, token, res) {
             })
         }
     })
+
+
+}
+
+// chapter utils
+exports.createChapter = function(mangaId, chapterNumber, files, res){
+
+    const newChapter = new Chapter({
+        mangaId: mangaId,
+        number: chapterNumber,
+        chapterImages: files
+    });
+
+    Chapter.create(newChapter, (err, item)=>{
+        if(err){
+            res.send({
+                status: 400,
+                message: "Something went wrong.",
+                errorLog: err
+            })
+        } else {
+           Manga.findOneAndUpdate({mangaId: mangaId}, {$push: {chapters: item._id}}, {new: true}, (err, manga)=>{
+            res.send({
+                status: 200,
+                message: "Chapter added successfully!"
+            })
+           })
+        }
+    })
+
+ 
+
 
 
 }

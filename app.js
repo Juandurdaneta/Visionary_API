@@ -9,12 +9,13 @@ const mangaRoutes = require('./mangas/routes')
 // body parser config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
+require('dotenv').config();
 
 // cors config
 app.use(cors())
 
 // db
-mongoose.connect("mongodb://localhost:27017/visionary", { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(process.env.DB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 
 // routes
 app.use('/users', userRoutes);

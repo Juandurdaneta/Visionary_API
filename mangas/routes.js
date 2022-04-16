@@ -109,9 +109,9 @@ router.get('/:mangaId/chapters', (req,res)=>{
     utils.getChapters(mangaId, res);
 });
 
-router.get('/:chapterId', (req, res)=>{
+router.get('/chapter/:chapterId', (req, res)=>{
     const chapterId = req.params.chapterId;
-    utils.getChapters(chapterId, res);
+    utils.getChapter(chapterId, res);
 })
 
 module.exports = router;

@@ -89,12 +89,15 @@ router.post('/:mangaId',  upload.array('pages'), (req, res) =>{
 
     filesUploaded.map((file)=>{
         chapterImages.push({
-            data: fs.readFileSync(path.join(__dirname + '/uploads/'+ mangaId + "/" + file.filename)),
+            data: fs.readFileSync(path.join(__dirname + '/uploads/'+ mangaId + "/" + file.filename), {encoding: 'base64'}),
             contentType: 'image/png'
         })
     })
 
     utils.createChapter(mangaId, chapterNumber, chapterImages, res );
+
+
+
 
 
 })
@@ -105,5 +108,10 @@ router.get('/:mangaId/chapters', (req,res)=>{
 
     utils.getChapters(mangaId, res);
 });
+
+router.get('/:chapterId', (req, res)=>{
+    const chapterId = req.params.chapterId;
+    utils.getChapters(chapterId, res);
+})
 
 module.exports = router;

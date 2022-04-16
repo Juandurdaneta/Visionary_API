@@ -163,3 +163,12 @@ exports.getChapters = function(mangaId, res){
     })
 }
 
+exports.getChapter = function(chapterId, res){
+    Chapter.find({_id: chapterId}, (err, chapter)=>{
+        if(!err){
+            res.send({
+                ...chapter
+            });
+        }
+    })
+}

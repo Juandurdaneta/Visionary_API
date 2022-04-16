@@ -12,7 +12,7 @@ let chaptersSchema = new mongoose.Schema({
         required: true
     },
     chapterImages : [{
-        data: Buffer,
+        data: String,
         contentType: String
     }]
 })
